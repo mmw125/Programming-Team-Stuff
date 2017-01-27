@@ -1,0 +1,13 @@
+12
+a = 4
+{
+print a
+a = 7
+print a
+{
+print a
+a = 9
+}
+print a
+}
+print a

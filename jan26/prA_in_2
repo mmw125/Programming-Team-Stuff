@@ -1,0 +1,20 @@
+19
+b = 4
+b = a
+print b
+{
+a = 7
+print b
+}
+a = 20
+{
+{
+{
+{
+print a
+print b
+}
+}
+}
+}
+print a

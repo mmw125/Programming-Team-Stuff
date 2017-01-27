@@ -1,0 +1,16 @@
+15
+a = b
+{
+c = 9
+print c
+}
+print c
+{
+c = 99999
+{
+c = d
+print c
+print d
+}
+print c
+}

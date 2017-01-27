@@ -1,5 +1,16 @@
 import os
 import sys
+import tempfile
+
+
+def run_command(command):
+    with open('temp', 'a+'):
+        pass
+    command = '{} > {}'.format(command, 'temp')
+    p = os.system(command)
+    with open('temp') as temp:
+        print(temp.read())
+    os.remove('temp')
 
 
 def run_tests(date, program):
@@ -16,15 +27,13 @@ def run_tests(date, program):
             continue
         file_path = os.path.join(date, f)
         if os.path.isfile(file_path):
-           files.append(file_path)
+            files.append(file_path)
     for file in files:
-        with open(file) as open_file:
-            pass
+        out = run_command('python {} < {}'.format(program_path, file))
     return 1
 
 
 if __name__ == "__main__":
-    print(sys.argv)
     if len(sys.argv) != 3:
         print("This must be called with exactly 3 arguments")
         exit(-1)
