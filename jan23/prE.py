@@ -1,5 +1,5 @@
 
-if __name__  == "__main__":
+if __name__ == "__main__":
     num = input()
     strs = []
     for i in range(int(num)):
