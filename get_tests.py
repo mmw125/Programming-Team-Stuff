@@ -1,13 +1,43 @@
-from bs4 import BeautifulSoup
+import getpass
 import json
 import requests
 import os
 import sys
 
+from bs4 import BeautifulSoup
+
+
+cookie = None
+
+
+def get_cookie():
+    global cookie
+    while cookie is None:
+        name = input('username')
+        pas = getpass.getpass()
+        data = '{"username":"' + name + '", "password":"' + pas + '"}'
+        req = requests.post("https://pcs.cs.cloud.vt.edu/api/login/", data=data)
+        if 'auth_token' in req.cookies:
+            cookie = req.cookies['auth_token']
+        else:
+            print("Invalid login")
+    return cookie
+
 
 def load_problem(folder, problem_id, letter):
+    url = 'https://pcs.cs.cloud.vt.edu/api/problems/{}/'.format(problem_id)
+    print("loading {}".format(url))
     req = requests.get('https://pcs.cs.cloud.vt.edu/api/problems/{}/'.format(problem_id))
-    bs = BeautifulSoup(json.loads(req.text)['content'])
+    js = json.loads(req.text)
+    if 'content' not in js:
+        req = requests.get('https://pcs.cs.cloud.vt.edu/api/problems/{}/'.format(problem_id),
+                           cookies={'auth_token': get_cookie()})
+        js = json.loads(req.text)
+    if 'content' not in js:
+        print(req.text)
+        print("Could not load problem {}".format(problem_id))
+        return
+    bs = BeautifulSoup(js['content'])
     i = 0
     python_file_path = os.path.join(folder, 'pr{}.py'.format(letter))
 
